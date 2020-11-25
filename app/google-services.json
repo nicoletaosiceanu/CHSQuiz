@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "815310248704",
+    "firebase_url": "https://chsquiz-b5630.firebaseio.com",
+    "project_id": "chsquiz-b5630",
+    "storage_bucket": "chsquiz-b5630.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815310248704:android:9e85987061d07077c031e5",
+        "android_client_info": {
+          "package_name": "com.example.chsquiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815310248704-cd2k7jg4h0h0m4303m7n9uvf4kog0v8c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMMfF1o4CF2okGx4ed_eyqKjs2xNuZuUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815310248704-cd2k7jg4h0h0m4303m7n9uvf4kog0v8c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
