@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        b1= (Button)findViewById(R.id.button1);
+       /* b1= (Button)findViewById(R.id.button1);
         b2= (Button)findViewById(R.id.button2);
         b3= (Button)findViewById(R.id.button3);
         b4= (Button)findViewById(R.id.button4);
@@ -108,14 +108,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 Handler handler=new Handler();
-                                /*handler.postDelayed({
-                                        b1.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        b2.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        b3.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        b4.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        updateQuestion();
-                                        },1500);
-                                */
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -337,6 +329,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         }.start();
-
+*/
     }
 }
