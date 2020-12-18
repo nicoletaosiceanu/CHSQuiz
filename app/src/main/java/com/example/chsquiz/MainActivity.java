@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.firstpage_main);
        /* b1= (Button)findViewById(R.id.button1);
         b2= (Button)findViewById(R.id.button2);
         b3= (Button)findViewById(R.id.button3);
