@@ -20,7 +20,7 @@
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/textView4"
-        app:layout_constraintHorizontal_bias="0.353"
+        app:layout_constraintHorizontal_bias="0.263"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -35,7 +35,7 @@
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/textView5"
-        app:layout_constraintHorizontal_bias="0.686"
+        app:layout_constraintHorizontal_bias="0.791"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 

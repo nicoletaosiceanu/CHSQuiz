@@ -83,7 +83,7 @@ import Model.Question;
                                             @Override
                                             public void run() {
                                                 correct++;
-                                                b1.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -120,10 +120,10 @@ import Model.Question;
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                b1.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b2.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b3.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b4.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -148,7 +148,7 @@ import Model.Question;
                                             @Override
                                             public void run() {
                                                 correct++;
-                                                b2.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -177,10 +177,10 @@ import Model.Question;
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                b1.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b2.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b3.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b4.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -202,7 +202,7 @@ import Model.Question;
                                             @Override
                                             public void run() {
                                                 correct++;
-                                                b3.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -231,10 +231,10 @@ import Model.Question;
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                b1.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b2.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b3.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b4.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -257,7 +257,7 @@ import Model.Question;
                                             @Override
                                             public void run() {
                                                 correct++;
-                                                b4.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -286,10 +286,10 @@ import Model.Question;
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                b1.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b2.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b3.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                                b4.setBackgroundColor(Color.parseColor("#03A9F4"));
+                                                b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                                 updateQuestion();
                                             }
                                         },1500);
@@ -300,12 +300,6 @@ import Model.Question;
 
                                 }
                             });
-
-
-
-
-
-
 
 
                         }
