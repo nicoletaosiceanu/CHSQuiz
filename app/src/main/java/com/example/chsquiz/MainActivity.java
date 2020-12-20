@@ -22,7 +22,6 @@ import Model.Question;
         public class MainActivity extends AppCompatActivity {
 
             Button b1, b2, b3, b4;
-
             @Override
             protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
@@ -32,10 +31,13 @@ import Model.Question;
                 b3 = (Button) findViewById(R.id.button3);
                 b4 = (Button) findViewById(R.id.button4);
 
+
                 b1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(com.example.chsquiz.MainActivity.this, quizut.class);
+                        Intent i = new Intent(com.example.chsquiz.MainActivity.this, Alegemat.class);
+                        String buttonText = b1.getText().toString();
+                       i.putExtra("numean", String.valueOf(buttonText));
                         startActivity(i);
                     }
                 });
@@ -44,6 +46,8 @@ import Model.Question;
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(com.example.chsquiz.MainActivity.this, Alegemat.class);
+                        String buttonText = b2.getText().toString();
+                        i.putExtra("numean", String.valueOf(buttonText));
                         startActivity(i);
                     }
                 });
@@ -52,6 +56,8 @@ import Model.Question;
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(com.example.chsquiz.MainActivity.this, Alegemat.class);
+                        String buttonText = b3.getText().toString();
+                        i.putExtra("numean", String.valueOf(buttonText));
                         startActivity(i);
                     }
                 });
@@ -59,6 +65,8 @@ import Model.Question;
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(com.example.chsquiz.MainActivity.this, Alegemat.class);
+                        String buttonText = b4.getText().toString();
+                        i.putExtra("numean", String.valueOf(buttonText));
                         startActivity(i);
                     }
                 });
