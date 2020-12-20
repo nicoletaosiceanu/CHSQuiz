@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CHSQuiz">
+        <activity android:name=".quizut"></activity>
+        <activity android:name=".Alegemat"></activity>
         <activity android:name=".ResultActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
