@@ -41,11 +41,12 @@ public class quizut extends AppCompatActivity {
         intrebare=(TextView)findViewById(R.id.intrb);
         cronometru=(TextView)findViewById(R.id.crono);
 
-
-        updateQuestion();
+        Intent ii=getIntent();
+        String materia=ii.getStringExtra("numematerie");
+        updateQuestion(materia);
         reverseTimer(30,timerTxt);
     }
-    private  void updateQuestion()
+    private  void updateQuestion(String mat)
     {
         total++;
         if(total>4)
@@ -60,7 +61,7 @@ public class quizut extends AppCompatActivity {
         }
         else
         {
-            reference= FirebaseDatabase.getInstance().getReference().child("Questions").child(String.valueOf(total));
+            reference= FirebaseDatabase.getInstance().getReference().child("TOATEMATERIILE").child(mat).child(String.valueOf(total));
             //total++;
             reference.addValueEventListener(new ValueEventListener()
             {
@@ -86,7 +87,7 @@ public class quizut extends AppCompatActivity {
                                     public void run() {
                                         correct++;
                                         b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
                             }
@@ -126,7 +127,7 @@ public class quizut extends AppCompatActivity {
                                         b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
 
@@ -151,7 +152,7 @@ public class quizut extends AppCompatActivity {
                                     public void run() {
                                         correct++;
                                         b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
                             }
@@ -183,7 +184,7 @@ public class quizut extends AppCompatActivity {
                                         b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
 
@@ -205,7 +206,7 @@ public class quizut extends AppCompatActivity {
                                     public void run() {
                                         correct++;
                                         b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
                             }
@@ -237,7 +238,7 @@ public class quizut extends AppCompatActivity {
                                         b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
 
@@ -260,7 +261,7 @@ public class quizut extends AppCompatActivity {
                                     public void run() {
                                         correct++;
                                         b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
                             }
@@ -292,7 +293,7 @@ public class quizut extends AppCompatActivity {
                                         b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
                                         b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion();
+                                        updateQuestion(mat);
                                     }
                                 },1500);
 
