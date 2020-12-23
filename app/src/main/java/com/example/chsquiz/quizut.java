@@ -17,7 +17,13 @@ package com.example.chsquiz;
         import com.google.firebase.database.FirebaseDatabase;
         import com.google.firebase.database.ValueEventListener;
 
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Random;
+
         import Model.Question;
+
+        import static android.os.CountDownTimer.*;
 
 public class quizut extends AppCompatActivity {
 
@@ -26,8 +32,10 @@ public class quizut extends AppCompatActivity {
     int total=0;
     int correct=0;
     int k=0;
+    int tm=0;
     DatabaseReference reference;
     int wrong =0;
+    public List<Integer> questionNos = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +49,15 @@ public class quizut extends AppCompatActivity {
         intrebare=(TextView)findViewById(R.id.intrb);
         cronometru=(TextView)findViewById(R.id.crono);
 
+        for (int i = 1; i < 7; i++) {
+            questionNos.add(i);
+        }
+
+        /*public void handleOnBackPressed() {
+            tm=1;
+            Intent i=new Intent(com.example.chsquiz.quizut.this,Alegemat.class);
+            startActivity(i);
+        }*/
         Intent ii=getIntent();
         String materia=ii.getStringExtra("numematerie");
         updateQuestion(materia);
@@ -48,6 +65,13 @@ public class quizut extends AppCompatActivity {
     }
     private  void updateQuestion(String mat)
     {
+
+        Random r = new Random();
+        int index = r.nextInt(questionNos.size());
+        int nrintrebare= questionNos.get(index);
+         questionNos.remove(index);
+
+
         total++;
         if(total>4)
         {
@@ -61,7 +85,9 @@ public class quizut extends AppCompatActivity {
         }
         else
         {
-            reference= FirebaseDatabase.getInstance().getReference().child("TOATEMATERIILE").child(mat).child(String.valueOf(total));
+
+
+            reference= FirebaseDatabase.getInstance().getReference().child("TOATEMATERIILE").child(mat).child(String.valueOf(nrintrebare));
             //total++;
             reference.addValueEventListener(new ValueEventListener()
             {
@@ -112,14 +138,7 @@ public class quizut extends AppCompatActivity {
 
 
                                 Handler handler=new Handler();
-                                /*handler.postDelayed({
-                                        b1.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        b2.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        b3.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        b4.setBackgroundColor(Color.parseColor("#03A9F4"));
-                                        updateQuestion();
-                                        },1500);
-                                */
+
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -313,10 +332,12 @@ public class quizut extends AppCompatActivity {
 
             });
         }
+
+
     }
     public void reverseTimer(int seconds,final TextView tv) {
 
-            new CountDownTimer(seconds * 1000 + 1000, 1000) {
+        new CountDownTimer(seconds * 1000 + 1000, 1000) {
                 public void onTick(long millisUntilFinished) {
                     int seconds = (int) (millisUntilFinished / 1000);
                     int minutes = seconds / 60;
@@ -324,9 +345,10 @@ public class quizut extends AppCompatActivity {
                     tv.setText(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                 }
 
+
                 public void onFinish() {
                     tv.setText("Completed");
-                    if (k == 0) {
+                    if (k == 0 && tm==0 ) {
                         Intent myIntent = new Intent(com.example.chsquiz.quizut.this, ResultActivity.class);
                         myIntent.putExtra("total", String.valueOf(total));
                         myIntent.putExtra("correct", String.valueOf(correct));
