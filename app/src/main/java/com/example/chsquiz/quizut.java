@@ -1,9 +1,14 @@
 package com.example.chsquiz;
 
-        import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.app.AppCompatActivity;
 
+        import android.content.Context;
         import android.content.Intent;
         import android.graphics.Color;
+        import android.hardware.Sensor;
+        import android.hardware.SensorEvent;
+        import android.hardware.SensorEventListener;
+        import android.hardware.SensorManager;
         import android.os.Bundle;
         import android.os.CountDownTimer;
         import android.os.Handler;
@@ -25,7 +30,7 @@ package com.example.chsquiz;
 
         import static android.os.CountDownTimer.*;
 
-public class quizut extends AppCompatActivity {
+public class quizut extends AppCompatActivity implements SensorEventListener  {
 
     Button b1,b2,b3,b4;
     TextView t1_question,timerTxt,intrebare,cronometru;
@@ -33,9 +38,23 @@ public class quizut extends AppCompatActivity {
     int correct=0;
     int k=0;
     int tm=0;
+    int READINGRATE = 1000000; // time in us ,500 ms   1 s
+    int MIN_TIME_BETWEEN_SAMPLES_NS=1500000000; //500 ms  800 ms
+    long mLastTimestamp=0;
     DatabaseReference reference;
     int wrong =0;
+    String materia;
+     Question question ;
     public List<Integer> questionNos = new ArrayList<>();
+
+
+    private SensorManager sensorManager; //Represents the Android sensor service
+    private Sensor accelerometer; // Represents a specific sensor
+
+     float deltaX = 0;
+     float deltaY = 0;
+     float deltaZ = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +72,22 @@ public class quizut extends AppCompatActivity {
             questionNos.add(i);
         }
 
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+
+
         /*public void handleOnBackPressed() {
             tm=1;
             Intent i=new Intent(com.example.chsquiz.quizut.this,Alegemat.class);
             startActivity(i);
         }*/
         Intent ii=getIntent();
-        String materia=ii.getStringExtra("numematerie");
-        updateQuestion(materia);
+         materia=ii.getStringExtra("numematerie");
+        updateQuestion();
         reverseTimer(30,timerTxt);
     }
-    private  void updateQuestion(String mat)
+    private  void updateQuestion()
     {
 
         Random r = new Random();
@@ -85,243 +109,18 @@ public class quizut extends AppCompatActivity {
         }
         else
         {
-
-
-            reference= FirebaseDatabase.getInstance().getReference().child("TOATEMATERIILE").child(mat).child(String.valueOf(nrintrebare));
+            reference= FirebaseDatabase.getInstance().getReference().child("TOATEMATERIILE").child(materia).child(String.valueOf(nrintrebare));
             //total++;
             reference.addValueEventListener(new ValueEventListener()
             {
-                public void onDataChange(DataSnapshot dataSnapshot)
-                {
-                    final Question question=dataSnapshot.getValue(Question.class);
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                     question = dataSnapshot.getValue(Question.class);
                     t1_question.setText(question.getQuestion());
                     b1.setText(question.getOption1());
                     b2.setText(question.getOption2());
                     b3.setText(question.getOption3());
                     b4.setText(question.getOption4());
 
-
-                    b1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(b1.getText().toString().equals(question.getAnswer()))
-                            {
-                                b1.setBackgroundColor(Color.GREEN);
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        correct++;
-                                        b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-                            }
-                            else
-                            {
-                                //answer wrong, find the correct answer and make it green
-                                wrong++;
-                                b1.setBackgroundColor(Color.RED);
-
-                                if(b2.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b2.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b3.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b3.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b4.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b4.setBackgroundColor(Color.GREEN);
-                                }
-
-
-                                Handler handler=new Handler();
-
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-
-
-
-
-                            }
-                        }
-                    });
-
-
-
-                    b2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(b2.getText().toString().equals(question.getAnswer()))
-                            {
-                                b2.setBackgroundColor(Color.GREEN);
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        correct++;
-                                        b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-                            }
-                            else
-                            {
-                                //answer wrong, find the correct answer and make it green
-                                wrong++;
-                                b2.setBackgroundColor(Color.RED);
-
-                                if(b1.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b1.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b3.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b3.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b4.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b4.setBackgroundColor(Color.GREEN);
-                                }
-
-
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-
-
-
-                            }
-                        }
-                    });
-
-                    b3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(b3.getText().toString().equals(question.getAnswer()))
-                            {
-                                b3.setBackgroundColor(Color.GREEN);
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        correct++;
-                                        b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-                            }
-                            else
-                            {
-                                //answer wrong, find the correct answer and make it green
-                                wrong++;
-                                b3.setBackgroundColor(Color.RED);
-
-                                if(b1.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b1.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b2.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b2.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b4.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b4.setBackgroundColor(Color.GREEN);
-                                }
-
-
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-
-
-
-                            }
-                        }
-                    });
-
-
-                    b4.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(b4.getText().toString().equals(question.getAnswer()))
-                            {
-                                b4.setBackgroundColor(Color.GREEN);
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        correct++;
-                                        b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-                            }
-                            else
-                            {
-                                //answer wrong, find the correct answer and make it green
-                                wrong++;
-                                b4.setBackgroundColor(Color.RED);
-
-                                if(b1.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b1.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b2.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b2.setBackgroundColor(Color.GREEN);
-                                }
-                                else  if(b3.getText().toString().equals(question.getAnswer()))
-                                {
-                                    b3.setBackgroundColor(Color.GREEN);
-                                }
-
-
-                                Handler handler=new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                        updateQuestion(mat);
-                                    }
-                                },1500);
-
-
-
-                            }
-
-                        }
-                    });
 
 
                 }
@@ -359,5 +158,235 @@ public class quizut extends AppCompatActivity {
             }.start();
 
 
+    }
+
+    //onResume() register the accelerometer for listening the events
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+
+    }
+
+    //onPause() unregister the accelerometer for stop listening the events
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    protected void onStart() {
+        super.onStart();
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            // success! we have an accelerometer
+
+            //get a Sensor object
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            // register a listener
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            // current activity ,the Sensor object to listen to,a delay constant from the SensorManager class
+            //The data delay controls the interval at which sensor events are sent to app via the onSensorChanged()
+        }
+    }
+
+    protected void onStop() {
+        super.onStop();
+        sensorManager.unregisterListener(this);
+    }
+
+    //The Android system calls the onSensorChanged() method when the sensor reports new data, passing in a SensorEvent object.
+    public void onSensorChanged(SensorEvent event) {
+
+        if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) {
+        } else {
+            deltaX = event.values[0];
+            deltaY = event.values[1];
+            deltaZ = event.values[2];
+
+            mLastTimestamp = event.timestamp;
+            // if the change is below 2, it is just plain noise
+
+            if (deltaX < 2 && deltaX > -2)
+                deltaX = 0;
+            if (deltaY < 2 && deltaY > -2)
+                deltaY = 0;
+            if (deltaZ < 2 && deltaZ > -2)
+                deltaZ = 0;
+
+            if (deltaY > 2.0 && deltaZ > 6) {
+                if (b1.getText().toString().equals(question.getAnswer())) {
+                    b1.setBackgroundColor(Color.GREEN);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            correct++;
+                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+                } else {
+                    //answer wrong, find the correct answer and make it green
+                    wrong++;
+                    b1.setBackgroundColor(Color.RED);
+
+                    if (b2.getText().toString().equals(question.getAnswer())) {
+                        b2.setBackgroundColor(Color.GREEN);
+                    } else if (b3.getText().toString().equals(question.getAnswer())) {
+                        b3.setBackgroundColor(Color.GREEN);
+                    } else if (b4.getText().toString().equals(question.getAnswer())) {
+                        b4.setBackgroundColor(Color.GREEN);
+                    }
+
+
+                    Handler handler = new Handler();
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+
+
+                }
+            }
+            if (deltaY < -2 && deltaZ > 6) {   /*gslben */
+
+                // b1.setBackgroundColor(Color.parseColor("#FFFF00"));
+                if (b2.getText().toString().equals(question.getAnswer())) {
+                    b2.setBackgroundColor(Color.GREEN);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            correct++;
+                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+                } else {
+                    //answer wrong, find the correct answer and make it green
+                    wrong++;
+                    b2.setBackgroundColor(Color.RED);
+
+                    if (b1.getText().toString().equals(question.getAnswer())) {
+                        b1.setBackgroundColor(Color.GREEN);
+                    } else if (b3.getText().toString().equals(question.getAnswer())) {
+                        b3.setBackgroundColor(Color.GREEN);
+                    } else if (b4.getText().toString().equals(question.getAnswer())) {
+                        b4.setBackgroundColor(Color.GREEN);
+                    }
+
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+
+
+                }
+            }
+            if (deltaX > 3.0 && deltaZ > 6.0) {  /*albastru*/
+
+                // b1.setBackgroundColor(Color.parseColor("#0000FF"));
+                if (b4.getText().toString().equals(question.getAnswer())) {
+                    b4.setBackgroundColor(Color.GREEN);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            correct++;
+                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+                } else {
+                    //answer wrong, find the correct answer and make it green
+                    wrong++;
+                    b4.setBackgroundColor(Color.RED);
+
+                    if (b1.getText().toString().equals(question.getAnswer())) {
+                        b1.setBackgroundColor(Color.GREEN);
+                    } else if (b2.getText().toString().equals(question.getAnswer())) {
+                        b2.setBackgroundColor(Color.GREEN);
+                    } else if (b3.getText().toString().equals(question.getAnswer())) {
+                        b3.setBackgroundColor(Color.GREEN);
+                    }
+
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+
+
+                }
+            }
+
+            if (deltaX < -2.0 && deltaZ > 6.0) {
+                //b1.setBackgroundColor(Color.parseColor("#FF0000"));
+                if (b3.getText().toString().equals(question.getAnswer())) {
+                    b3.setBackgroundColor(Color.GREEN);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            correct++;
+                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+                } else {
+                    //answer wrong, find the correct answer and make it green
+                    wrong++;
+                    b3.setBackgroundColor(Color.RED);
+
+                    if (b1.getText().toString().equals(question.getAnswer())) {
+                        b1.setBackgroundColor(Color.GREEN);
+                    } else if (b2.getText().toString().equals(question.getAnswer())) {
+                        b2.setBackgroundColor(Color.GREEN);
+                    } else if (b4.getText().toString().equals(question.getAnswer())) {
+                        b4.setBackgroundColor(Color.GREEN);
+                    }
+
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            updateQuestion();
+                        }
+                    }, 1500);
+
+
+                }
+            }
+        }
     }
 }
