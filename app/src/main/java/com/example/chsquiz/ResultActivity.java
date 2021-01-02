@@ -38,4 +38,9 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void onBackPressed() {
+        Intent ii = new Intent(com.example.chsquiz.ResultActivity.this, MainActivity.class);
+        startActivity(ii);
+    }
 }

@@ -37,7 +37,6 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     int total=0;
     int correct=0;
     int k=0;
-    int tm=0;
     int READINGRATE = 1000000; // time in us ,500 ms   1 s
     int MIN_TIME_BETWEEN_SAMPLES_NS=1500000000; //500 ms  800 ms
     long mLastTimestamp=0;
@@ -46,8 +45,8 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     String materia;
      Question question ;
     public List<Integer> questionNos = new ArrayList<>();
-
-
+   public  CountDownTimer timer;
+    long milliLeft;
     private SensorManager sensorManager; //Represents the Android sensor service
     private Sensor accelerometer; // Represents a specific sensor
 
@@ -67,25 +66,17 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         timerTxt=(TextView)findViewById(R.id.timerTxt);
         intrebare=(TextView)findViewById(R.id.intrb);
         cronometru=(TextView)findViewById(R.id.crono);
-
         for (int i = 1; i < 7; i++) {
             questionNos.add(i);
         }
 
-
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-
-
-        /*public void handleOnBackPressed() {
-            tm=1;
-            Intent i=new Intent(com.example.chsquiz.quizut.this,Alegemat.class);
-            startActivity(i);
-        }*/
         Intent ii=getIntent();
-         materia=ii.getStringExtra("numematerie");
-        updateQuestion();
+        materia=ii.getStringExtra("numematerie");
         reverseTimer(30,timerTxt);
+        updateQuestion();
+
     }
     private  void updateQuestion()
     {
@@ -106,6 +97,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
             i.putExtra("correct",String.valueOf(correct));
             i.putExtra("incorrect",String.valueOf(wrong));
             startActivity(i);
+
         }
         else
         {
@@ -134,20 +126,28 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
 
     }
+
+
+    //millisInFuture = The number of millis in the future from the call to start() until the countdown is done and onFinish() is called.
+    //countDownInterval =The interval at which you would like to receive timer updates.
     public void reverseTimer(int seconds,final TextView tv) {
 
-        new CountDownTimer(seconds * 1000 + 1000, 1000) {
-                public void onTick(long millisUntilFinished) {
+        timer=new CountDownTimer(seconds * 1000 + 1000, 1000) {
+
+                public void onTick(long millisUntilFinished)
+                {
+                    milliLeft=millisUntilFinished;
                     int seconds = (int) (millisUntilFinished / 1000);
                     int minutes = seconds / 60;
                     seconds = seconds % 60;
+
                     tv.setText(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                 }
 
 
                 public void onFinish() {
                     tv.setText("Completed");
-                    if (k == 0 && tm==0 ) {
+                    if (k == 0  ) {
                         Intent myIntent = new Intent(com.example.chsquiz.quizut.this, ResultActivity.class);
                         myIntent.putExtra("total", String.valueOf(total));
                         myIntent.putExtra("correct", String.valueOf(correct));
@@ -156,22 +156,20 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                     }
                 }
             }.start();
-
-
     }
 
-    //onResume() register the accelerometer for listening the events
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this, accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
-
+    public void timerResume()
+    {
+        if (timer == null) {
+            reverseTimer((int) milliLeft / 1000, timerTxt);
+        }
     }
 
-    //onPause() unregister the accelerometer for stop listening the events
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
+    public void onBackPressed() {
+       timer.cancel();
+       super.onBackPressed();
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -192,11 +190,29 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         }
     }
 
+    //onResume() register the accelerometer for listening the events
+    protected void onResume() {
+        super.onResume();
+        timerResume();
+        sensorManager.registerListener(this, accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    // Called when the activity is no longer visible to the user. This may happen either because a new activity is
+    // being started on top, an existing one is being brought in front of this one, or this one is being destroyed.
     protected void onStop() {
         super.onStop();
+        //timer.cancel();
+       // timer=null;
         sensorManager.unregisterListener(this);
     }
 
+    //onPause() unregister the accelerometer for stop listening the events
+    protected void onPause() {
+        super.onPause();
+        timer.cancel();
+        timer=null;
+        sensorManager.unregisterListener(this);
+    }
     //The Android system calls the onSensorChanged() method when the sensor reports new data, passing in a SensorEvent object.
     public void onSensorChanged(SensorEvent event) {
 
@@ -301,7 +317,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
                 }
             }
-            if (deltaX > 3.0 && deltaZ > 6.0) {  /*albastru*/
+            if (deltaX > 2.0 && deltaZ > 6.0) {  /*albastru*/
 
                 // b1.setBackgroundColor(Color.parseColor("#0000FF"));
                 if (b4.getText().toString().equals(question.getAnswer())) {
