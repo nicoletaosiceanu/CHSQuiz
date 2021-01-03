@@ -1,7 +1,7 @@
-package Model;
+package com.example.chsquiz;
 
 public class Question {
-    public String question,option1,option2,option3,option4,answer;
+    public String question, option1, option2, option3, option4, answer;
 
     public Question(String question, String option1, String option2, String option3, String option4, String answer) {
         this.question = question;
@@ -13,7 +13,7 @@ public class Question {
     }
 
     public Question(){}
-    public String getQuestion() {
+    public String returneazaIntrebare() {
         return question;
     }
 
@@ -21,7 +21,7 @@ public class Question {
         this.question = question;
     }
 
-    public String getOption1() {
+    public String returneazaOptiunea1() {
         return option1;
     }
 
@@ -29,7 +29,7 @@ public class Question {
         this.option1 = option1;
     }
 
-    public String getOption2() {
+    public String returneazaOptiunea2() {
         return option2;
     }
 
@@ -37,7 +37,7 @@ public class Question {
         this.option2 = option2;
     }
 
-    public String getOption3() {
+    public String returneazaOptiunea3() {
         return option3;
     }
 
@@ -45,7 +45,7 @@ public class Question {
         this.option3 = option3;
     }
 
-    public String getOption4() {
+    public String returneazaOptiunea4() {
         return option4;
     }
 
@@ -61,3 +61,4 @@ public class Question {
         this.answer = answer;
     }
 }
+

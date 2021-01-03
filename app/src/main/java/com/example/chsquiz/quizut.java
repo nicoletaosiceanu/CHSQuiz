@@ -12,8 +12,7 @@ package com.example.chsquiz;
         import android.os.Bundle;
         import android.os.CountDownTimer;
         import android.os.Handler;
-        import android.view.View;
-        import android.widget.Button;
+         import android.widget.Button;
         import android.widget.TextView;
 
         import com.google.firebase.database.DataSnapshot;
@@ -26,10 +25,6 @@ package com.example.chsquiz;
         import java.util.List;
         import java.util.Random;
 
-        import Model.Question;
-
-        import static android.os.CountDownTimer.*;
-
 public class quizut extends AppCompatActivity implements SensorEventListener  {
 
     Button b1,b2,b3,b4;
@@ -37,14 +32,13 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     int total=0;
     int correct=0;
     int k=0;
-    int READINGRATE = 1000000; // time in us ,500 ms   1 s
-    int MIN_TIME_BETWEEN_SAMPLES_NS=1500000000; //500 ms  800 ms
+    int MIN_TIME_BETWEEN_SAMPLES_NS= 1500000000; //1500 ms
     long mLastTimestamp=0;
     DatabaseReference reference;
     int wrong =0;
     String materia;
      Question question ;
-    public List<Integer> questionNos = new ArrayList<>();
+    public List<Integer> questionNr = new ArrayList<>();
    public  CountDownTimer timer;
     long milliLeft;
     private SensorManager sensorManager; //Represents the Android sensor service
@@ -66,31 +60,36 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         timerTxt=(TextView)findViewById(R.id.timerTxt);
         intrebare=(TextView)findViewById(R.id.intrb);
         cronometru=(TextView)findViewById(R.id.crono);
+
+        //questionNos contine numereleintrebarilor
         for (int i = 1; i < 7; i++) {
-            questionNos.add(i);
+            questionNr.add(i);
         }
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         Intent ii=getIntent();
         materia=ii.getStringExtra("numematerie");
-        reverseTimer(30,timerTxt);
+        reverseTimer(40,timerTxt);
         updateQuestion();
 
     }
     private  void updateQuestion()
     {
-
+        //nextInt(n) is used to get a random number between 0(inclusive) and the number passed in this argument(n), exclusive,
+              // in our case 0-5
         Random r = new Random();
-        int index = r.nextInt(questionNos.size());
-        int nrintrebare= questionNos.get(index);
-         questionNos.remove(index);
+        int index = r.nextInt(questionNr.size());
+        //nrintrebare este nr din questionNos de la pozitia index
+        int nrintrebare= questionNr.get(index);
+        //stergem nr din questionNos de la pozitia index , pentru a nu folosii din nou acea intrebare
+         questionNr.remove(index);
 
 
         total++;
         if(total>4)
         {
-            //open the result activity
+            //daca am parcurs cele 4 intrebari , ajungem pe pagina cu rezultate
             k=1;
             Intent i=new Intent(com.example.chsquiz.quizut.this,ResultActivity.class);
             i.putExtra("total",String.valueOf(total-1));
@@ -102,18 +101,15 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         else
         {
             reference= FirebaseDatabase.getInstance().getReference().child("TOATEMATERIILE").child(materia).child(String.valueOf(nrintrebare));
-            //total++;
             reference.addValueEventListener(new ValueEventListener()
             {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      question = dataSnapshot.getValue(Question.class);
-                    t1_question.setText(question.getQuestion());
-                    b1.setText(question.getOption1());
-                    b2.setText(question.getOption2());
-                    b3.setText(question.getOption3());
-                    b4.setText(question.getOption4());
-
-
+                    t1_question.setText(question.returneazaIntrebare());
+                    b1.setText(question.returneazaOptiunea1());
+                    b2.setText(question.returneazaOptiunea2());
+                    b3.setText(question.returneazaOptiunea3());
+                    b4.setText(question.returneazaOptiunea4());
 
                 }
                 public void onCancelled(DatabaseError databaseError)
@@ -123,10 +119,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
             });
         }
-
-
     }
-
 
     //millisInFuture = The number of millis in the future from the call to start() until the countdown is done and onFinish() is called.
     //countDownInterval =The interval at which you would like to receive timer updates.
@@ -170,7 +163,6 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
        super.onBackPressed();
     }
 
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
@@ -179,34 +171,27 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     protected void onStart() {
         super.onStart();
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            // success! we have an accelerometer
-
             //get a Sensor object
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             // register a listener
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            // current activity ,the Sensor object to listen to,a delay constant from the SensorManager class
+                         // current activity ,the Sensor object to listen to,a delay constant from the SensorManager class
             //The data delay controls the interval at which sensor events are sent to app via the onSensorChanged()
         }
     }
 
-    //onResume() register the accelerometer for listening the events
+
     protected void onResume() {
         super.onResume();
         timerResume();
         sensorManager.registerListener(this, accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    // Called when the activity is no longer visible to the user. This may happen either because a new activity is
-    // being started on top, an existing one is being brought in front of this one, or this one is being destroyed.
     protected void onStop() {
         super.onStop();
-        //timer.cancel();
-       // timer=null;
         sensorManager.unregisterListener(this);
     }
 
-    //onPause() unregister the accelerometer for stop listening the events
     protected void onPause() {
         super.onPause();
         timer.cancel();
@@ -216,15 +201,17 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     //The Android system calls the onSensorChanged() method when the sensor reports new data, passing in a SensorEvent object.
     public void onSensorChanged(SensorEvent event) {
 
-        if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) {
+        //timestamp  returneaza timpul la care evenimentul a fost creat
+        //daca diferenta dintre evenimentul actual si cel trecut e mai mare de 1,5 secunde continuam
+        if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) { return;
         } else {
             deltaX = event.values[0];
             deltaY = event.values[1];
             deltaZ = event.values[2];
 
             mLastTimestamp = event.timestamp;
-            // if the change is below 2, it is just plain noise
 
+            //daca valoarea e sub 2 si mai mare ca -2, o consideram 0
             if (deltaX < 2 && deltaX > -2)
                 deltaX = 0;
             if (deltaY < 2 && deltaY > -2)
@@ -232,6 +219,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
             if (deltaZ < 2 && deltaZ > -2)
                 deltaZ = 0;
 
+            //suntem pe axa Y
             if (deltaY > 2.0 && deltaZ > 6) {
                 if (b1.getText().toString().equals(question.getAnswer())) {
                     b1.setBackgroundColor(Color.GREEN);
@@ -245,7 +233,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         }
                     }, 1500);
                 } else {
-                    //answer wrong, find the correct answer and make it green
+                    // raspunsul e gresit ,se face rosu, cautam raspunsul corect , acesta se face verde
                     wrong++;
                     b1.setBackgroundColor(Color.RED);
 
@@ -274,9 +262,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
                 }
             }
-            if (deltaY < -2 && deltaZ > 6) {   /*gslben */
-
-                // b1.setBackgroundColor(Color.parseColor("#FFFF00"));
+            if (deltaY < -2 && deltaZ > 6) {
                 if (b2.getText().toString().equals(question.getAnswer())) {
                     b2.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -289,7 +275,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         }
                     }, 1500);
                 } else {
-                    //answer wrong, find the correct answer and make it green
+                    // raspunsul e gresit ,se face rosu, cautam raspunsul corect , acesta se face verde
                     wrong++;
                     b2.setBackgroundColor(Color.RED);
 
@@ -317,9 +303,9 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
                 }
             }
-            if (deltaX > 2.0 && deltaZ > 6.0) {  /*albastru*/
 
-                // b1.setBackgroundColor(Color.parseColor("#0000FF"));
+            //suntem pe axa X
+            if (deltaX > 2.0 && deltaZ > 6.0) {
                 if (b4.getText().toString().equals(question.getAnswer())) {
                     b4.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -332,7 +318,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         }
                     }, 1500);
                 } else {
-                    //answer wrong, find the correct answer and make it green
+                    // raspunsul e gresit ,se face rosu, cautam raspunsul corect , acesta se face verde
                     wrong++;
                     b4.setBackgroundColor(Color.RED);
 
@@ -375,7 +361,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         }
                     }, 1500);
                 } else {
-                    //answer wrong, find the correct answer and make it green
+                    // raspunsul e gresit ,se face rosu, cautam raspunsul corect , acesta se face verde
                     wrong++;
                     b3.setBackgroundColor(Color.RED);
 
