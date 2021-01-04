@@ -80,9 +80,9 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
               // in our case 0-5
         Random r = new Random();
         int index = r.nextInt(questionNr.size());
-        //nrintrebare este nr din questionNos de la pozitia index
+        //nrintrebare este nr intrebarii din questionNr de la pozitia index
         int nrintrebare= questionNr.get(index);
-        //stergem nr din questionNos de la pozitia index , pentru a nu folosii din nou acea intrebare
+        //stergem nr intrebarii din questionNr de la pozitia index pentru a nu folosi din nou acea intrebare
          questionNr.remove(index);
 
 
@@ -221,6 +221,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
             //suntem pe axa Y
             if (deltaY > 2.0 && deltaZ > 6) {
+                //daca textul butonului b1 este raspunsul corect, butonul o sa devina verde
                 if (b1.getText().toString().equals(question.getAnswer())) {
                     b1.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -228,7 +229,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         @Override
                         public void run() {
                             correct++;
-                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b1.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -251,10 +252,10 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b1.setBackgroundColor(Color.WHITE);
+                            b2.setBackgroundColor(Color.WHITE);
+                            b3.setBackgroundColor(Color.WHITE);
+                            b4.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -270,7 +271,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         @Override
                         public void run() {
                             correct++;
-                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b2.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -292,10 +293,10 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b1.setBackgroundColor(Color.WHITE);
+                            b2.setBackgroundColor(Color.WHITE);
+                            b3.setBackgroundColor(Color.WHITE);
+                            b4.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -313,7 +314,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         @Override
                         public void run() {
                             correct++;
-                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b4.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -335,10 +336,10 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b1.setBackgroundColor(Color.WHITE);
+                            b2.setBackgroundColor(Color.WHITE);
+                            b3.setBackgroundColor(Color.WHITE);
+                            b4.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -356,7 +357,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                         @Override
                         public void run() {
                             correct++;
-                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b3.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
@@ -378,10 +379,10 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            b1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b2.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b3.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            b4.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            b1.setBackgroundColor(Color.WHITE);
+                            b2.setBackgroundColor(Color.WHITE);
+                            b3.setBackgroundColor(Color.WHITE);
+                            b4.setBackgroundColor(Color.WHITE);
                             updateQuestion();
                         }
                     }, 1500);
