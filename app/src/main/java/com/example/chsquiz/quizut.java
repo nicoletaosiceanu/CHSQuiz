@@ -61,7 +61,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         intrebare=(TextView)findViewById(R.id.intrb);
         cronometru=(TextView)findViewById(R.id.crono);
 
-        //questionNos contine numereleintrebarilor
+        //questionNos contine numerele intrebarilor
         for (int i = 1; i < 7; i++) {
             questionNr.add(i);
         }
@@ -125,7 +125,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     //countDownInterval =The interval at which you would like to receive timer updates.
     public void reverseTimer(int seconds,final TextView tv) {
 
-        timer=new CountDownTimer(seconds * 1000 + 1000, 1000) {
+        timer=new CountDownTimer(seconds * 1000, 1000) {
 
                 public void onTick(long millisUntilFinished)
                 {
@@ -220,7 +220,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                 deltaZ = 0;
 
             //suntem pe axa Y
-            if (deltaY > 2.0 && deltaZ > 6) {
+            if (deltaY > 2.0 && deltaZ > 6 && (deltaX ==0)) {
                 //daca textul butonului b1 este raspunsul corect, butonul o sa devina verde
                 if (b1.getText().toString().equals(question.getAnswer())) {
                     b1.setBackgroundColor(Color.GREEN);
@@ -263,7 +263,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
                 }
             }
-            if (deltaY < -2 && deltaZ > 6) {
+            if (deltaY < -2 && deltaZ > 6 && (deltaX ==0)) {
                 if (b2.getText().toString().equals(question.getAnswer())) {
                     b2.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -306,7 +306,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
             }
 
             //suntem pe axa X
-            if (deltaX > 2.0 && deltaZ > 6.0) {
+            if (deltaX > 2.0 && deltaZ > 6.0 && (deltaY ==0)) {
                 if (b4.getText().toString().equals(question.getAnswer())) {
                     b4.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -348,7 +348,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                 }
             }
 
-            if (deltaX < -2.0 && deltaZ > 6.0) {
+            if (deltaX < -2.0 && deltaZ > 6.0 && (deltaY ==0)) {
                 //b1.setBackgroundColor(Color.parseColor("#FF0000"));
                 if (b3.getText().toString().equals(question.getAnswer())) {
                     b3.setBackgroundColor(Color.GREEN);
