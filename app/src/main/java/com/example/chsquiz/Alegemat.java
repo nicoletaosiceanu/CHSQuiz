@@ -24,9 +24,6 @@ public class Alegemat extends AppCompatActivity {
         String anstud=i.getStringExtra("numean");
         t1.setText(anstud);
 
-       // String sir =  t1.getText().toString();
-
-
         if(anstud.equals("AN I"))
         {
             b1.setText("FIZICA");

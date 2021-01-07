@@ -71,7 +71,7 @@
 
     <View
         android:id="@+id/view"
-        android:layout_width="318dp"
+        android:layout_width="320dp"
         android:layout_height="220dp"
         android:background="@drawable/primuecr"
         app:layout_constraintBottom_toBottomOf="parent"
