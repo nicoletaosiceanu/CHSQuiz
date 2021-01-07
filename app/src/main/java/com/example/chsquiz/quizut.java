@@ -28,7 +28,7 @@ package com.example.chsquiz;
 public class quizut extends AppCompatActivity implements SensorEventListener  {
 
     Button b1,b2,b3,b4;
-    TextView t1_question,timerTxt,intrebare,cronometru;
+    TextView text_question,timerTxt,intrebare,cronometru;
     int total=0;
     int correct=0;
     int k=0;
@@ -44,9 +44,9 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     private SensorManager sensorManager; //Represents the Android sensor service
     private Sensor accelerometer; // Represents a specific sensor
 
-     float deltaX = 0;
-     float deltaY = 0;
-     float deltaZ = 0;
+     float X = 0;
+     float Y = 0;
+     float Z = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         b2= (Button)findViewById(R.id.button2);
         b3= (Button)findViewById(R.id.button3);
         b4= (Button)findViewById(R.id.button4);
-        t1_question=(TextView)findViewById(R.id.questionsTxt);
+        text_question =(TextView)findViewById(R.id.questionsTxt);
         timerTxt=(TextView)findViewById(R.id.timerTxt);
         intrebare=(TextView)findViewById(R.id.intrb);
         cronometru=(TextView)findViewById(R.id.crono);
@@ -70,7 +70,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
         Intent ii=getIntent();
         materia=ii.getStringExtra("numematerie");
-        reverseTimer(40,timerTxt);
+        createTimer(40,timerTxt);
         updateQuestion();
 
     }
@@ -105,7 +105,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
             {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      question = dataSnapshot.getValue(Question.class);
-                    t1_question.setText(question.returneazaIntrebare());
+                    text_question.setText(question.returneazaIntrebare());
                     b1.setText(question.returneazaOptiunea1());
                     b2.setText(question.returneazaOptiunea2());
                     b3.setText(question.returneazaOptiunea3());
@@ -123,7 +123,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
     //millisInFuture = The number of millis in the future from the call to start() until the countdown is done and onFinish() is called.
     //countDownInterval =The interval at which you would like to receive timer updates.
-    public void reverseTimer(int seconds,final TextView tv) {
+    public void createTimer(int seconds, final TextView tv) {
 
         timer=new CountDownTimer(seconds * 1000, 1000) {
 
@@ -136,8 +136,6 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
                     tv.setText(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                 }
-
-
                 public void onFinish() {
                     tv.setText("Completed");
                     if (k == 0  ) {
@@ -154,7 +152,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     public void timerResume()
     {
         if (timer == null) {
-            reverseTimer((int) milliLeft / 1000, timerTxt);
+            createTimer((int) milliLeft / 1000, timerTxt);
         }
     }
 
@@ -187,11 +185,6 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         sensorManager.registerListener(this, accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    protected void onStop() {
-        super.onStop();
-        sensorManager.unregisterListener(this);
-    }
-
     protected void onPause() {
         super.onPause();
         timer.cancel();
@@ -205,22 +198,22 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
         //daca diferenta dintre evenimentul actual si cel trecut e mai mare de 1,5 secunde continuam
         if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) { return;
         } else {
-            deltaX = event.values[0];
-            deltaY = event.values[1];
-            deltaZ = event.values[2];
+            X = event.values[0];
+            Y = event.values[1];
+            Z = event.values[2];
 
             mLastTimestamp = event.timestamp;
 
             //daca valoarea e sub 2 si mai mare ca -2, o consideram 0
-            if (deltaX < 2 && deltaX > -2)
-                deltaX = 0;
-            if (deltaY < 2 && deltaY > -2)
-                deltaY = 0;
-            if (deltaZ < 2 && deltaZ > -2)
-                deltaZ = 0;
+            if (X < 2 && X > -2)
+                X = 0;
+            if (Y < 2 && Y > -2)
+                Y = 0;
+            if (Z < 2 && Z > -2)
+                Z = 0;
 
             //suntem pe axa Y
-            if (deltaY > 2.0 && deltaZ > 6 && (deltaX ==0)) {
+            if (Y > 2.0 && Z > 6 && (X ==0)) {
                 //daca textul butonului b1 este raspunsul corect, butonul o sa devina verde
                 if (b1.getText().toString().equals(question.getAnswer())) {
                     b1.setBackgroundColor(Color.GREEN);
@@ -263,7 +256,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
                 }
             }
-            if (deltaY < -2 && deltaZ > 6 && (deltaX ==0)) {
+            if (Y < -2 && Z > 6 && (X ==0)) {
                 if (b2.getText().toString().equals(question.getAnswer())) {
                     b2.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -306,7 +299,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
             }
 
             //suntem pe axa X
-            if (deltaX > 2.0 && deltaZ > 6.0 && (deltaY ==0)) {
+            if (X > 2.0 && Z > 6.0 && (Y ==0)) {
                 if (b4.getText().toString().equals(question.getAnswer())) {
                     b4.setBackgroundColor(Color.GREEN);
                     Handler handler = new Handler();
@@ -348,7 +341,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                 }
             }
 
-            if (deltaX < -2.0 && deltaZ > 6.0 && (deltaY ==0)) {
+            if (X < -2.0 && Z > 6.0 && (Y ==0)) {
                 //b1.setBackgroundColor(Color.parseColor("#FF0000"));
                 if (b3.getText().toString().equals(question.getAnswer())) {
                     b3.setBackgroundColor(Color.GREEN);
