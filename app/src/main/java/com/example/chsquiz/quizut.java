@@ -30,6 +30,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     Button b1,b2,b3,b4;
     TextView text_question,timerTxt,intrebare,cronometru;
     int total=0;
+    int count=0;
     int correct=0;
     int k=0;
     int MIN_TIME_BETWEEN_SAMPLES_NS= 1500000000; //1500 ms
@@ -105,6 +106,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
             {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      question = dataSnapshot.getValue(Question.class);
+                     count++;
                     text_question.setText(question.returneazaIntrebare());
                     b1.setText(question.returneazaOptiunea1());
                     b2.setText(question.returneazaOptiunea2());
@@ -114,7 +116,6 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                 }
                 public void onCancelled(DatabaseError databaseError)
                 {
-
                 }
 
             });
@@ -195,9 +196,10 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
     public void onSensorChanged(SensorEvent event) {
 
         //timestamp  returneaza timpul la care evenimentul a fost creat
-        //daca diferenta dintre evenimentul actual si cel trecut e mai mare de 1,5 secunde continuam
+        //daca diferenta dintre evenimentul actual si cel trecut e mai mare de 1,5 secunde si a fost afisata cel putin
+        // o intrebare ,continuam si verificam ce buton a fost selectat
         if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) {
-        } else {
+        } else if(count >0) {
             X = event.values[0];
             Y = event.values[1];
             Z = event.values[2];
