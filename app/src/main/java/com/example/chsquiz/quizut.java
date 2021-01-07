@@ -137,7 +137,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
                     tv.setText(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                 }
                 public void onFinish() {
-                    tv.setText("Completed");
+                    tv.setText("Gata");
                     if (k == 0  ) {
                         Intent myIntent = new Intent(com.example.chsquiz.quizut.this, ResultActivity.class);
                         myIntent.putExtra("total", String.valueOf(total));
@@ -196,7 +196,7 @@ public class quizut extends AppCompatActivity implements SensorEventListener  {
 
         //timestamp  returneaza timpul la care evenimentul a fost creat
         //daca diferenta dintre evenimentul actual si cel trecut e mai mare de 1,5 secunde continuam
-        if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) { return;
+        if (event.timestamp - mLastTimestamp < MIN_TIME_BETWEEN_SAMPLES_NS) {
         } else {
             X = event.values[0];
             Y = event.values[1];
